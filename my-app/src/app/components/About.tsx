@@ -21,11 +21,11 @@ export default function About() {
             </div>
             
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
-              Building Digital Excellence Since 2016
+              Building Digital Excellence
             </h2>
             
             <p className="text-lg text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
-              DevCraft Solutions is a premier software development company specializing in creating 
+               Dhanush Technologies is a premier software development company specializing in creating 
               innovative web applications and providing comprehensive digital solutions. Our team of 
               expert developers combines cutting-edge technology with creative problem-solving to 
               deliver exceptional results.

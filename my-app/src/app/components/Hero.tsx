@@ -1,14 +1,99 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { ArrowRight, Sparkles, Code2, Rocket } from 'lucide-react';
 
 interface HeroProps {
   onStartProject: () => void;
 }
 
+// declare particlesJS globally
+declare global {
+  interface Window {
+    particlesJS?: (tagId: string, config: Record<string, any>) => void;
+  }
+}
+
 export default function Hero({ onStartProject }: HeroProps) {
+  const particlesInitialized = useRef(false);
+
+  const initParticles = (color: string) => {
+    window.particlesJS?.("particles-js", {
+      particles: {
+        number: { value: 80, density: { enable: true, value_area: 800 } },
+        color: { value: color },
+        shape: { type: "circle" },
+        opacity: { value: 0.5, random: true },
+        size: { value: 3, random: true },
+        line_linked: {
+          enable: true,
+          distance: 150,
+          color: color,
+          opacity: 0.4,
+          width: 1,
+        },
+        move: {
+          enable: true,
+          speed: 2,
+          random: true,
+          out_mode: "out",
+        },
+      },
+      interactivity: {
+        detect_on: "canvas",
+        events: { onhover: { enable: true, mode: "grab" } },
+      },
+      retina_detect: true,
+    });
+  };
+
+  const setupParticles = () => {
+    const isDark = document.documentElement.classList.contains("dark");
+    const color = isDark ? "#00DDFF" : "#4F46E5"; // cyan for dark, indigo for light
+
+    if (window.particlesJS) {
+      initParticles(color);
+    } else {
+      const script = document.createElement("script");
+      script.src = "https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js";
+      script.async = true;
+      script.onload = () => initParticles(color);
+      document.head.appendChild(script);
+    }
+  };
+
+  useEffect(() => {
+    setupParticles();
+
+    // watch for dark mode toggle
+    const observer = new MutationObserver(() => {
+      const container = document.getElementById("particles-js");
+      if (container) container.innerHTML = "";
+      setupParticles();
+    });
+
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+
+    return () => {
+      observer.disconnect();
+      const container = document.getElementById("particles-js");
+      if (container) container.innerHTML = "";
+    };
+  }, []);
+
   return (
-    <section id="home" className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-900 dark:to-purple-900">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+    <section
+      id="home"
+      className="relative min-h-screen flex items-center justify-center 
+      bg-gradient-to-br from-blue-50 via-white to-purple-50 
+      dark:from-gray-900 dark:via-gray-900 dark:to-purple-900"
+    >
+      {/* Particles background */}
+      <div id="particles-js" className="absolute inset-0 z-0" />
+
+      {/* Your existing content */}
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="text-center">
           {/* Floating icons animation */}
           <div className="relative mb-8">
@@ -28,18 +113,19 @@ export default function Hero({ onStartProject }: HeroProps) {
               <Sparkles className="h-4 w-4 mr-2" />
               Professional Software Development
             </div>
-            
+
             <h1 className="text-5xl md:text-7xl font-bold text-gray-900 dark:text-white leading-tight">
               Transform Your
-              <span className="block bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 bg-clip-text text-transparent">
+              <span className="block bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 bg-clip-text text-transparent ">
                 Digital Vision
               </span>
               Into Reality
             </h1>
-            
+
             <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
-              We craft exceptional web applications, websites, and provide ongoing maintenance 
-              to help your business thrive in the digital landscape.
+              We craft exceptional web applications, websites, and provide
+              ongoing maintenance to help your business thrive in the digital
+              landscape.
             </p>
           </div>
 
@@ -51,9 +137,11 @@ export default function Hero({ onStartProject }: HeroProps) {
               <span>Start Your Project</span>
               <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform duration-200" />
             </button>
-            
+
             <button
-              onClick={() => document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' })}
+              onClick={() =>
+                document.getElementById("services")?.scrollIntoView({ behavior: "smooth" })
+              }
               className="px-8 py-4 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-xl font-semibold text-lg hover:border-blue-500 dark:hover:border-blue-400 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 backdrop-blur-sm"
             >
               Learn More
