@@ -1,69 +1,74 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { ArrowRight, Sparkles, Code2, Rocket } from 'lucide-react';
 
 interface HeroProps {
   onStartProject: () => void;
 }
 
-// declare particlesJS globally
+// Define config type for particles.js
+type ParticlesConfig = {
+  particles: object;
+  interactivity?: object;
+  retina_detect?: boolean;
+};
+
+// Declare particlesJS globally
 declare global {
   interface Window {
-    particlesJS?: (tagId: string, config: Record<string, any>) => void;
+    particlesJS?: (tagId: string, config: ParticlesConfig) => void;
   }
 }
 
 export default function Hero({ onStartProject }: HeroProps) {
-  const particlesInitialized = useRef(false);
-
-  const initParticles = (color: string) => {
-    window.particlesJS?.("particles-js", {
-      particles: {
-        number: { value: 80, density: { enable: true, value_area: 800 } },
-        color: { value: color },
-        shape: { type: "circle" },
-        opacity: { value: 0.5, random: true },
-        size: { value: 3, random: true },
-        line_linked: {
-          enable: true,
-          distance: 150,
-          color: color,
-          opacity: 0.4,
-          width: 1,
-        },
-        move: {
-          enable: true,
-          speed: 2,
-          random: true,
-          out_mode: "out",
-        },
-      },
-      interactivity: {
-        detect_on: "canvas",
-        events: { onhover: { enable: true, mode: "grab" } },
-      },
-      retina_detect: true,
-    });
-  };
-
-  const setupParticles = () => {
-    const isDark = document.documentElement.classList.contains("dark");
-    const color = isDark ? "#00DDFF" : "#4F46E5"; // cyan for dark, indigo for light
-
-    if (window.particlesJS) {
-      initParticles(color);
-    } else {
-      const script = document.createElement("script");
-      script.src = "https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js";
-      script.async = true;
-      script.onload = () => initParticles(color);
-      document.head.appendChild(script);
-    }
-  };
-
   useEffect(() => {
+    const initParticles = (color: string) => {
+      window.particlesJS?.("particles-js", {
+        particles: {
+          number: { value: 80, density: { enable: true, value_area: 800 } },
+          color: { value: color },
+          shape: { type: "circle" },
+          opacity: { value: 0.5, random: true },
+          size: { value: 3, random: true },
+          line_linked: {
+            enable: true,
+            distance: 150,
+            color: color,
+            opacity: 0.4,
+            width: 1,
+          },
+          move: {
+            enable: true,
+            speed: 2,
+            random: true,
+            out_mode: "out",
+          },
+        },
+        interactivity: {
+          detect_on: "canvas",
+          events: { onhover: { enable: true, mode: "grab" } },
+        },
+        retina_detect: true,
+      });
+    };
+
+    const setupParticles = () => {
+      const isDark = document.documentElement.classList.contains("dark");
+      const color = isDark ? "#00DDFF" : "#4F46E5"; // cyan for dark, indigo for light
+
+      if (window.particlesJS) {
+        initParticles(color);
+      } else {
+        const script = document.createElement("script");
+        script.src = "https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js";
+        script.async = true;
+        script.onload = () => initParticles(color);
+        document.head.appendChild(script);
+      }
+    };
+
     setupParticles();
 
-    // watch for dark mode toggle
+    // Watch for dark mode toggle
     const observer = new MutationObserver(() => {
       const container = document.getElementById("particles-js");
       if (container) container.innerHTML = "";

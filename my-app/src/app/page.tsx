@@ -8,7 +8,7 @@ import About from './components/About';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import ProjectWizard from './components/ProjectWizard';
-import ThemeProvider from "@/app/components/ThemeProvider";
+
 
 function App() {
   const [isProjectWizardOpen, setIsProjectWizardOpen] = useState(false);
