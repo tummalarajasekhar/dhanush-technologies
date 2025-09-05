@@ -60,7 +60,9 @@ export default function ProjectWizard({ isOpen, onClose }: ProjectWizardProps) {
     features: [],
     contactInfo: {
         name: '',
-        email: ''
+        email: '',
+        company: '',
+        
     }
   });
 
@@ -95,12 +97,32 @@ export default function ProjectWizard({ isOpen, onClose }: ProjectWizardProps) {
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
-    
-    // Simulate form submission
-    await new Promise(resolve => setTimeout(resolve, 3000));
-    
-    setIsSubmitting(false);
+
+    const response = await new Promise(resolve => setTimeout(resolve, 2000));
+     // Simulate form submission
+      setIsSubmitting(false);
     setIsSubmitted(true);
+    try {
+      console.log('Form data:', projectData);
+      const response = await fetch('https://rajabackend.srikrishnatechhub.com/submit-form', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(projectData)
+      });
+      if (response.ok) {
+       
+        
+      } else {
+        // setError('Failed to send message. Please try again.');
+      }
+    } catch (err) {
+      console.error('Error submitting form:', err);
+      // setError('Something went wrong. Please try again.');
+    }
+    // await new Promise(resolve => setTimeout(resolve, 3000));
+    
+    // setIsSubmitting(false);
+    // setIsSubmitted(true);
   };
 
   const resetWizard = () => {
